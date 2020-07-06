@@ -33,18 +33,23 @@ app.get("*", (req, res) => {
 // add new note by post request
 app.post("/api/notes", (req, res) => {
     // Read data from the file
+    console.log(req.body)
+    const newNotes = req.body
+    newNotes.id = req.body.title
+    console.log(req.body.title)
   fs.readFile("./db/db.json", "utf8", (err, data) => {
     if (err) {
       return res.send("Error occurred");
     } else {
       // manipulate/update the data
-      const arrayOfNotes = JSON.parse(data);
-      arrayOfNotes.push(req.body);
+      let arrayOfNotes = JSON.parse(data);
+      arrayOfNotes.push(newNotes);
       // write the data back to file
       fs.writeFile("./db/db.json",JSON.stringify(arrayOfNotes),(err) => {
           if (err) {
             return res.send("An error occurred writing your data");
           }
+          // res.json("Successfully wrote note!");
           res.json("Successfully wrote note!");
         }
       );
