@@ -2,6 +2,8 @@
 const express = require("express")
 // path package
 const path = require("path")
+// file package
+const fs = require("fs");
 // Create an instance of express
 const app = express()
 // PORT
@@ -19,7 +21,19 @@ app.get("/notes",(req,res)=>{
 })
 
 // API Routes -> JSON
-
+app.get("/api/db",(req,res)=>{
+    fs.readFile("./db/db.json","utf8",(err,data)=>{
+        if(err){
+            return res.send("Error occurred")
+        }
+        else{
+            // convert json to js 
+            const arrayOfNotes= JSON.parse(data);
+            // converts back to json
+            res.json(arrayOfNotes);
+        }
+    })
+})
 // post route
 // delete route
 
