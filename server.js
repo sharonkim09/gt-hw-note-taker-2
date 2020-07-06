@@ -39,7 +39,7 @@ app.post("/api/notes", (req, res) => {
   // Read data from the file
   fs.readFile("./db/db.json", "utf8", (err, data) => {
     if (err) {
-      return res.send("Error occurred");
+      return res.send("Error occurred reading your data!");
     } else {
       // manipulate/update the data
       let arrayOfNotes = JSON.parse(data);
@@ -47,7 +47,7 @@ app.post("/api/notes", (req, res) => {
       // write the data back to file
       fs.writeFile("./db/db.json", JSON.stringify(arrayOfNotes), (err) => {
         if (err) {
-          return res.send("An error occurred writing your data");
+          return res.send("An error occurred writing your data!");
         }
         res.json("Successfully wrote note!");
       });
@@ -62,7 +62,7 @@ app.delete("/api/notes/:id", (req, res) => {
   // console.log(arrayOfNotes)
   fs.readFile("./db/db.json", "utf8", (err, data) => {
     if (err) {
-      console.log("error");
+      return res.send("Error occurred reading note data!");
     } else {
       // manipulate/update the data
       let noteObj = JSON.parse(data);
@@ -73,7 +73,7 @@ app.delete("/api/notes/:id", (req, res) => {
       // write the notes back to file
       fs.writeFile("./db/db.json", JSON.stringify(newNote), (err) => {
         if (err) {
-          console.log("Error deleting notes");
+          return res.send("Error deleting notes");
         } else {
           console.log("Deleted notes!");
           res.json("Deleted!");
