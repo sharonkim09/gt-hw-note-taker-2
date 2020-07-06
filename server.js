@@ -17,7 +17,7 @@ app.use(express.static("public"));
 
 // functionalities
 // view Routes -> html
-// get route
+// notes page
 app.get("/notes", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
@@ -25,18 +25,20 @@ app.get("/notes", (req, res) => {
 app.get("/api/notes", function (req, res) {
   res.sendFile(path.join(__dirname, "/db/db.json"));
 });
+// home page
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 // API Routes -> JSON
 // post route
-// add new note by post request
+// add/create new note by post request
 app.post("/api/notes", (req, res) => {
-    // Read data from the file
+    // check the inputs and inject to the db
     console.log(req.body)
     const newNotes = req.body
     newNotes.id = req.body.title
     console.log(req.body.title)
+    // Read data from the file
   fs.readFile("./db/db.json", "utf8", (err, data) => {
     if (err) {
       return res.send("Error occurred");
@@ -49,15 +51,40 @@ app.post("/api/notes", (req, res) => {
           if (err) {
             return res.send("An error occurred writing your data");
           }
-          // res.json("Successfully wrote note!");
           res.json("Successfully wrote note!");
         }
       );
     }
   });
-
 });
 // delete route
+app.delete("/api/notes/:id", (req,res)=>{
+  // declaring the selected note's index
+  const index = req.params.id
+  // const arrayOfNotes = JSON.parse(data)
+  // console.log(arrayOfNotes)
+  fs.readFile("./db/db.json", "utf8" ,(err, data)=>{
+    if(err){
+      console.log("error")
+    }else{
+      let noteObj= JSON.parse(data)
+      // test each element return elements whose index value is not equal to the selected note
+      let newNote = noteObj.filter(item => {
+        return item.id !== index;
+      });
+      // rewrite the notes
+      fs.writeFile("./db/db.json", JSON.stringify(newNote), (err)=>{
+        if(err){
+          console.log("Error deleting notes")
+        }else{
+        console.log("Deleted notes!")
+        res.json("Deleted!")
+        }
+      })
+    }
+    })
+    })
+
 
 // Listener
 app.listen(PORT, () => {
