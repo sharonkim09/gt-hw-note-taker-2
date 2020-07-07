@@ -49,7 +49,7 @@ app.post("/api/notes", (req, res) => {
         if (err) {
           return res.send("An error occurred writing your data!");
         }
-        res.json("Successfully wrote note!");
+        res.json(arrayOfNotes);
       });
     }
   });
@@ -76,7 +76,7 @@ app.delete("/api/notes/:id", (req, res) => {
           return res.send("Error deleting notes");
         } else {
           console.log("Deleted notes!");
-          res.json("Deleted!");
+          res.json(noteObj);
         }
       });
     }
